@@ -1,0 +1,17 @@
+language: java
+jdk:
+  - oraclejdk7
+env:
+  - TERM=dumb DB=h2 JDBC_URL= JDBC_USER= JDBC_PASSWORD=
+services: 
+  - mongodb
+  - rabbitmq
+before_install:
+  - chmod +x gradlew
+install:
+  - sudo rabbitmq-plugins enable rabbitmq_management
+  - sudo service rabbitmq-server restart
+script:
+  - ./gradlew test --parallel-threads=14
+after_success:
+  - ./gradlew jacocoTestReport coveralls
